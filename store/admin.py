@@ -1,8 +1,8 @@
 from django.db.models.aggregates import Count
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import format_html, urlencode
+from django.contrib.contenttypes.admin import GenericTabularInline
 from . import models
 
 
@@ -18,9 +18,6 @@ class InventoryFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == '<10':
             queryset.filter(inventory__lt=10)
-    
-class TagInline(GenericTabularInline):
-    model = TaggedItem
 
 
 @admin.register(models.Product)
@@ -31,7 +28,6 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
     actions = ['clear_inventory']
-    inlines = [TagInline]
     list_display = ['title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
