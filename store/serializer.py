@@ -1,7 +1,7 @@
-from rest_framework import serializer
+from rest_framework import serializers
 
-class ProductSerializer(serializer.Serializer):
+class ProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    title = serializer.CharField(max_length=255)
-    unit_price = serializers.DecimalField(max_digits=2, decimal_places=2)
+    title = serializers.CharField(max_length=255)
+    unit_price = serializers.DecimalField(max_digits=6, decimal_places=2)
     
