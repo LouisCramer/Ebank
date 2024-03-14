@@ -4,7 +4,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 # from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
-# from rest_framework import status
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from .filters import ProductFilter
 from .models import Product, Collection, Review, Cart, CartItem, OrderItem
@@ -44,11 +44,12 @@ class CollectionViewSet(ModelViewSet):
         products_count=Count('products')).all()
     serializer_class = CollectionSerializer
     
-    def destroy(self, request):
-        if OrderItem.objects.filter(product_id=kwargs['pk']).count() > 0:
+    def delete(self, request, pk):
+        collection = get_object_or_404(Collection, pk=pk)
+        if collection.products.count() > 0:
             return Response({'error': 'Collection cannot be deleted because it includes one or more products.'})
-        
-        return super().destroy(request, *args, **kwargs)
+        collection.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 class ReviewViewSet(ModelViewSet):
