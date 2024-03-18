@@ -57,8 +57,9 @@ class ProductAdmin(admin.ModelAdmin):
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'membership']
     list_editable = ['membership']
-    ordering = ['first_name', 'last_name']
+    ordering = ['user__first_name', 'user__last_name']
     list_per_page = 10
+    list_select_related = ['user']
     search_fields = ['first_name__istartswith', 'last_name__istartswith']
     
     @admin.display(ordering='orders_count')
@@ -71,7 +72,9 @@ class CustomerAdmin(admin.ModelAdmin):
             }))
         return format_html('<a href="{}">{}</a>', url, collection.orders_count)
     
-                            # also try stackedInline
+# also try stackedInline
+
+
 class OrderItemInline(admin.TabularInline):
     autocomplete_fields = ['product']
     min_num = 1
@@ -87,6 +90,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'placed_at', 'customer']
     list_per_page = 10
 
+
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
     autocomplete_fields = ['featured_product']
@@ -96,18 +100,15 @@ class CollectionAdmin(admin.ModelAdmin):
     @admin.display(ordering='products_count')
     def products_count(self, collection):
         url = (
-            reverse('admin:store_product_changelist') 
+            reverse('admin:store_product_changelist')
             + '?' 
             + urlencode({
                 'collection__id': str(collection.id)
             }))
-        return format_html('<a href="{}">{}</a>', url, collection.products_count)
+        return format_html('<a href="{}">{}</a>', url,
+                           collection.products_count)
     
     def get_queryset(self, request): 
         return super().get_queryset(request).annotate(
             products_count=Count('products')
         )
-
-
-
-
