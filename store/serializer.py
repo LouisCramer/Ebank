@@ -1,6 +1,6 @@
 from decimal import Decimal
 from rest_framework import serializers
-from store.models import Product, Collection, Review, Cart, CartItem
+from store.models import Product, Collection, Review, Cart, CartItem, Customer
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -80,9 +80,9 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     
         try:
             CartItem.objects.get(cart_id=cart_id, product_id=product_id)
-            cart_item.quantity += quantity
-            cart_item.save()
-            self.CartItem.instance = cart_item
+            CartItem.quantity += quantity
+            CartItem.save()
+            self.CartItem.instance = CartItem
         except CartItem.DoesNotExist:
             self.instance = CartItem.objects.create(cart_id=cart_id,
                                                     **self.validated_data)
@@ -98,4 +98,11 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['quantity']
-  
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Customer
+        fields = ['id', 'user_id', 'phone', 'birth_date', 'membership']
