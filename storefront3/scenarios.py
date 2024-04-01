@@ -58,3 +58,17 @@ class Solution:
                 low += 1
                 high -= 1
         return "".join(s) # convert list to string
+    
+
+# Find the Highest Altitude
+# given an integer array gain of length n where gain[i] 
+# is the net gain in altitude between points i​​​​​​ and i + 1
+
+class Solution:
+    def largestAltitude(self, gain: List[int]) -> int:
+        a = 0
+        maxVal = 0
+        for i in gain:
+            a+=i
+            maxVal=max(a,maxVal)
+        return maxVal
