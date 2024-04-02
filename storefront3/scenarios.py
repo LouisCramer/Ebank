@@ -62,7 +62,7 @@ class Solution:
 
 # Find the Highest Altitude
 # given an integer array gain of length n where gain[i] 
-# is the net gain in altitude between points i​​​​​​ and i + 1
+# is the net gain in altitude between points i​​​​​ and i + 1
 
 class Solution:
     def largestAltitude(self, gain: List[int]) -> int:
@@ -72,3 +72,41 @@ class Solution:
             a+=i
             maxVal=max(a,maxVal)
         return maxVal
+
+class getFib:
+    def getNthFib(n, calculated = {1:0, 2:1, 3:1}):
+        if n in calculated:
+         return calculated[n]
+    
+        calculated[n] =  getNthFib(n-1, calculated) + getNthFib(n-2, calculated)
+        return calculated[n]
+    
+
+class largestArray():
+    def largestRange(array):
+        numbers = {x:0 for x in array}
+        left = right = 0
+    
+        for number in array:
+            if numbers[number] == 0:
+                left_count = number - 1
+                right_count = number + 1
+            
+            while left_count in numbers:
+                numbers[left_count] = 1
+                left_count -= 1
+            left_count += 1
+            
+            while right_count in numbers:
+                numbers[right_count] = 1
+                right_count -= 1
+                right_count += 1
+            
+            if (right-left) <= (right_count-left_count):
+                right = right_count
+                left = left_count
+    
+        return [left, right]
+           
+                
+        
